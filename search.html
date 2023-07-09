@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search a talent</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flexbox;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #424141;
+        }
+
+        header nav ul {
+            list-style: none;
+        }
+
+        header nav ul .name {
+            font-size: 25px;
+            font-weight: 500;
+        }
+
+        header nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+            font-weight: 400;
+        }
+
+        header nav ul li a {
+            color: #f8f6f6;
+            text-decoration: none;
+        }
+
+        .container::before {
+            background: url('se.jpg') no-repeat center center/cover;
+            content: "";
+            /*content is used to insert generated content*/
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-attachment: scroll;
+            z-index: -1;
+            /* opacity: 1; */
+
+        }
+
+        #search .search-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+          }
+          
+          #search .search-inputs input {
+            padding: 10px;
+            font-size: 16px;
+          }
+          
+          #search .search-inputs button, #search-all {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+
+          #search-all{
+            margin-left: 12%;
+          }
+          
+          #candidates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+          }
+          
+          .candidate-card {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          }
+          
+          .candidate-card h4 {
+            margin-bottom: 10px;
+          }
+          
+          .candidate-card p {
+            margin-bottom: 20px;
+          }
+          
+          .candidate-card .rank-button {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+          }
+
+          
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <ul>
+                    <li class="name"><a href="index.html">HireDuo</a></li>
+                    <li><a href="index.html">Features</a></li>
+                    <li><a href="index.html">Benefits</a></li>
+                    <li><a href="index.html">Request Demo</a></li>
+                    <li id="cred"><a href="signUp.html">Sign Up</a></li>
+                    <li><a href="search.html">Search a Talent</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section id="search">
+        <div class="container">
+            <h3>Search Candidates</h3>
+            <div class="search-inputs">
+                <input type="text" id="location" placeholder="Enter location">
+                <input type="text" id="job-role" placeholder="Enter job role">
+                <button id="search-btn" class="btn">Search</button>
+            </div>
+        </div>
+        <button id="search-all" class="btn">See all candidates</button>
+      </section>
+      
+      <section id="candidate-list">
+        <div class="container">
+          <h3>Candidate List</h3>
+          <div id="candidates"></div>
+        </div>
+      </section>
+      
+
+
+    <script>
+        if(localStorage.getItem("username")){
+        document.getElementById("cred").remove();
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const candidateData = [
+              {
+                name: "John Doe",
+                location: "New York",
+                jobRole: "Software Engineer",
+                Points:1480,
+              },
+              {
+                name: "Jane Smith",
+                location: "San Francisco",
+                jobRole: "Product Manager",
+                Points:1300,
+              },
+              {
+                name: "David Johnson",
+                location: "Chicago",
+                jobRole: "Data Analyst",
+                Points:1100,
+              },
+              {
+                name: "Emily Brown",
+                location: "Boston",
+                jobRole: "UX Designer",
+                Points:1500,
+              },
+            ];
+          
+            const searchBtn = document.getElementById("search-btn");
+            const getAllcandidatesBtn = document.getElementById("search-all")
+            const locationInput = document.getElementById("location");
+            const jobRoleInput = document.getElementById("job-role");
+            const candidatesContainer = document.getElementById("candidates");
+          
+            function displayCandidates(candidates) {
+              candidatesContainer.innerHTML = "";
+              if (candidates.length === 0) {
+                candidatesContainer.innerHTML = "<p>No candidates found.</p>";
+              } else {
+                candidates.forEach((candidate) => {
+                  const card = document.createElement("div");
+                  card.classList.add("candidate-card");
+                  card.innerHTML = `
+                    <h4>${candidate.name} &nbsp&nbsp&nbsp<span>&#129689;${candidate.Points}</span></h4> 
+                    <p><strong>Location:</strong> ${candidate.location}</p>
+                    <p><strong>Job Role:</strong> ${candidate.jobRole}</p>
+                    <a href="#" class="rank-button">Hire</a>
+                  `;
+                  candidatesContainer.appendChild(card);
+                });
+              }
+            }
+          
+            function searchCandidates() {
+              const location = locationInput.value.trim().toLowerCase();
+              const jobRole = jobRoleInput.value.trim().toLowerCase();
+              const filteredCandidates = candidateData.filter((candidate) => {
+                const candidateLocation = candidate.location.toLowerCase();
+                const candidateJobRole = candidate.jobRole.toLowerCase();
+                return (
+                  (location === "" || candidateLocation.includes(location)) &&
+                  (jobRole === "" || candidateJobRole.includes(jobRole))
+                );
+              });
+              displayCandidates(filteredCandidates);
+            }
+          
+            searchBtn.addEventListener("click", function (e) {
+              e.preventDefault();
+              searchCandidates();
+            });
+            
+            getAllcandidatesBtn.addEventListener("click", function (e) {
+              e.preventDefault();
+              displayCandidates(candidateData);
+            });
+          
+            locationInput.addEventListener("keydown", function (e) {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                searchCandidates();
+              }
+            });
+          
+            jobRoleInput.addEventListener("keydown", function (e) {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                searchCandidates();
+              }
+            });
+          });
+          
+
+    </script>
+</body>
+
+</html>

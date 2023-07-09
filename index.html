@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>HireDuo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <ul>
+                    <li class="name"><a href="index.html">HireDuo</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#benefits">Benefits</a></li>
+                    <li><a href="#demo">Request Demo</a></li>
+                    <li id="cred"><a href="signUp.html">Sign Up</a></li>
+                    <li id="search"><a href="search.html">Search a Talent</a></li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="main">
+        <section id="hero">
+            <div class="container">
+                <h1>Efficiency, Simplified.</h1>
+                <p>Transform the way you hire top talent with HirePro</p>
+            </div>
+        </section>
+    </div>
+
+
+
+    <section id="features">
+        <div class="container">
+            <!-- <h2>Key Features</h2> -->
+            <div class="wrapper">
+                <i id="left" class="fa-solid fa-angle-left"></i>
+                <ul class="carousel">
+                    <li class="card">
+                        <h2>Collaborative Hiring Workflow</h2>
+                        <div class="description">Streamline communication and collaboration among hiring managers, HR
+                            professionals, and stakeholders involved in the hiring process.</div>
+                    </li>
+                    <li class="card">
+                        <h2>Automated Job Board Integration</h2>
+                        <div class="description">Expand your reach and attract qualified candidates with our seamless
+                            integration with popular job boards like LinkedIn, Indeed, and Glassdoor.</div>
+                    </li>
+                    <li class="card">
+                        <h2>Customizable Interview Scheduling</h2>
+                        <div class="description">Schedule interviews with ease by setting your availability and allowing
+                            candidates to choose from available slots.</div>
+                    </li>
+                    <li class="card">
+                        <h2>Applicant Tracking System (ATS)</h2>
+                        <div class="description">Say goodbye to piles of resumes and scattered candidate information.
+                            With HirePro's robust ATS, you can effortlessly manage and track applicants throughout the
+                            hiring process.</div>
+                    </li>
+                </ul>
+                <i id="right" class="fa-solid fa-angle-right"></i>
+            </div>
+        </div>
+    </section>
+
+    <section id="benefits">
+        <div class="container">
+            <h2>Benefits for Hiring Managers and HR Professionals</h3>
+                <div class="wrapper">
+                    <i id="left" class="fa-solid fa-angle-left"></i>
+                    <ul class="carousel">
+                        <li class="card">
+                            <h2>Time Savings For Recruiter</h2>
+                            <div class="description">Automate repetitive tasks and focus on engaging with top talent.
+                            </div>
+                        </li>
+                        <li class="card">
+                            <h2>Enhanced Candidate Experience</h2>
+                            <div class="description">Provide a seamless and professional hiring experience to attract
+                                and retain the best candidates.</div>
+                        </li>
+                        <li class="card">
+                            <h2>Improved Collaboration For Recruiter</h2>
+                            <div class="description">Foster collaboration among stakeholders to ensure a smooth and
+                                well-coordinated hiring process.</div>
+                        </li>
+                        <li class="card">
+                            <h2>Data-Driven Insights with us</h2>
+                            <div class="description">Make informed decisions based on comprehensive data and analytics
+                                to optimize your recruitment efforts.</div>
+                        </li>
+                    </ul>
+                    <i id="right" class="fa-solid fa-angle-right"></i>
+                </div>
+        </div>
+    </section>
+
+    <section id="demo">
+        <div class="container">
+            <h3>Ready to Transform Your Hiring Process?</h3>
+            <p>Experience the efficiency, simplicity, and effectiveness of our online recruitment solution today.</p>
+            <a href="signp.html" class="btn">Request a Demo</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 HireDuo. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+</body>
+<script>
+    if(localStorage.getItem("username")){
+    document.getElementById("cred").remove();
+
+    }
+    const wrapper = document.querySelector(".wrapper");
+    const carousel = document.querySelector(".carousel");
+    const firstCardWidth = carousel.querySelector(".card").offsetWidth;
+    const arrowBtns = document.querySelectorAll(".wrapper i");
+    const carouselChildrens = [...carousel.children];
+
+    let isDragging = false, isAutoPlay = true, startX, startScrollLeft, timeoutId;
+
+    // Get the number of cards that can fit in the carousel at once
+    let cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
+
+    // Insert copies of the last few cards to beginning of carousel for infinite scrolling
+    carouselChildrens.slice(-cardPerView).reverse().forEach(card => {
+        carousel.insertAdjacentHTML("afterbegin", card.outerHTML);
+    });
+
+    // Insert copies of the first few cards to end of carousel for infinite scrolling
+    carouselChildrens.slice(0, cardPerView).forEach(card => {
+        carousel.insertAdjacentHTML("beforeend", card.outerHTML);
+    });
+
+    // Scroll the carousel at appropriate postition to hide first few duplicate cards on Firefox
+    carousel.classList.add("no-transition");
+    carousel.scrollLeft = carousel.offsetWidth;
+    carousel.classList.remove("no-transition");
+
+    // Add event listeners for the arrow buttons to scroll the carousel left and right
+    arrowBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            carousel.scrollLeft += btn.id == "left" ? -firstCardWidth : firstCardWidth;
+        });
+    });
+
+    const dragStart = (e) => {
+        isDragging = true;
+        carousel.classList.add("dragging");
+        // Records the initial cursor and scroll position of the carousel
+        startX = e.pageX;
+        startScrollLeft = carousel.scrollLeft;
+    }
+
+    const dragging = (e) => {
+        if (!isDragging) return; // if isDragging is false return from here
+        // Updates the scroll position of the carousel based on the cursor movement
+        carousel.scrollLeft = startScrollLeft - (e.pageX - startX);
+    }
+
+    const dragStop = () => {
+        isDragging = false;
+        carousel.classList.remove("dragging");
+    }
+
+    const infiniteScroll = () => {
+        // If the carousel is at the beginning, scroll to the end
+        if (carousel.scrollLeft === 0) {
+            carousel.classList.add("no-transition");
+            carousel.scrollLeft = carousel.scrollWidth - (2 * carousel.offsetWidth);
+            carousel.classList.remove("no-transition");
+        }
+        // If the carousel is at the end, scroll to the beginning
+        else if (Math.ceil(carousel.scrollLeft) === carousel.scrollWidth - carousel.offsetWidth) {
+            carousel.classList.add("no-transition");
+            carousel.scrollLeft = carousel.offsetWidth;
+            carousel.classList.remove("no-transition");
+        }
+
+        // Clear existing timeout & start autoplay if mouse is not hovering over carousel
+        clearTimeout(timeoutId);
+        if (!wrapper.matches(":hover")) autoPlay();
+    }
+
+    const autoPlay = () => {
+        if (window.innerWidth < 800 || !isAutoPlay) return; // Return if window is smaller than 800 or isAutoPlay is false
+        // Autoplay the carousel after every 2500 ms
+        timeoutId = setTimeout(() => carousel.scrollLeft += firstCardWidth, 2500);
+    }
+    autoPlay();
+
+    carousel.addEventListener("mousedown", dragStart);
+    carousel.addEventListener("mousemove", dragging);
+    document.addEventListener("mouseup", dragStop);
+    carousel.addEventListener("scroll", infiniteScroll);
+    wrapper.addEventListener("mouseenter", () => clearTimeout(timeoutId));
+    wrapper.addEventListener("mouseleave", autoPlay);
+</script>
+
+</html>

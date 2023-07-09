@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Signup</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            margin-bottom: 10px;
+            width: 92%;
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Signup</h2>
+            <form id="signup-form">
+                <input type="text" placeholder="Username" id="signup-username" required>
+                <input type="password" placeholder="Password" id="signup-password" required>
+                <button type="submit">Signup</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            var username = document.getElementById("signup-username").value;
+            var password = document.getElementById("signup-password").value;
+
+            localStorage.setItem("username", username);
+            localStorage.setItem("password",password);
+
+            alert("Signup successful!");
+            window.location.replace("index.html");
+
+        });
+
+    </script>
+</body>
+
+</html>
